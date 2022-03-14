@@ -8,7 +8,6 @@
 
 type Mutation @aws_iam {
 	createWeather1(
-		id: ID,
 		channelid: String,
 		devstatus: String,
 		epi_timestamp: String,
