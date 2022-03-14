@@ -36,7 +36,8 @@ def lambda_handler(event, context):
         aws.region_name,
         'appsync',
         )
-    url1="https://wcsgbmcgirh3zcffcevywzd7be.appsync-api.ap-south-1.amazonaws.com/graphql"
+    
+    url1="https://********************.appsync-api.ap-south-1.amazonaws.com/graphql"
     #sync Transport -------- > RequestsHTTPTransport
     transport = RequestsHTTPTransport(url=url1,headers=headers,auth=auth)
     print(transport)
@@ -45,8 +46,8 @@ def lambda_handler(event, context):
     
     query = gql(
         """
-            mutation createWeather1 ($id:ID,$channelid:String,$devstatus:String,$epi_timestamp:String,$intensity:String){
-            createWeather1(id:$id,channelid:$channelid,devstatus:$devstatus,epi_timestamp:$epi_timestamp,intensity:$intensity) {
+            mutation createWeather1 ($channelid:String,$devstatus:String,$epi_timestamp:String,$intensity:String){
+            createWeather1(channelid:$channelid,devstatus:$devstatus,epi_timestamp:$epi_timestamp,intensity:$intensity) {
             id
             channelid
             devstatus
@@ -57,7 +58,6 @@ def lambda_handler(event, context):
     )
         
     params = {
-        "id":"1",
         "channelid":"kid424234",
         "devstatus":"nijan325546",
         "epi_timestamp":"bala3552",
