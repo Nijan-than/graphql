@@ -1,0 +1,104 @@
+#app.py file in lambda 
+
+import json
+import os
+import sys
+import asyncio
+import pprint
+from gql import Client,gql
+from gql.dsl import DSLSchema, DSLMutation, dsl_gql
+from gql.dsl import *
+from gql.transport.requests import RequestsHTTPTransport
+from boto3 import Session
+from requests_aws4auth import AWS4Auth
+
+
+def lambda_handler(event, context):
+    # accept mentioning here is that input type will be accept as json and content type we are using is json hence we mentioning the 
+    headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        }
+    # Need to mention the Access Key ID , Secret Access key ID and Region in environment variables 
+    aws = Session(aws_access_key_id=os.getenv('ACCESS_KEY_ID'),
+                     aws_secret_access_key=os.getenv('SECRET_ACCESS_KEY'),
+                     region_name=os.getenv('REGION_NAME'))
+    
+    credentials = aws.get_credentials().get_frozen_credentials()
+
+    auth = AWS4Auth(
+        credentials.access_key,
+        credentials.secret_key,
+        aws.region_name,
+        'appsync',
+        )
+   # Need to add the Graphql API_url in url
+    url1="https://******************.appsync-api.region.amazonaws.com/graphql"
+    
+   # sync Transport -------- > RequestsHTTPTransport add url, header , authentication  in transport
+    transport = RequestsHTTPTransport(url=url1,headers=headers,auth=auth)
+    
+   # add the transport in client, fetch_schema_from_transport: definition:True indicate that if we want to fetch the schema from the transport using an introspection query
+    client=Client(transport=transport,fetch_schema_from_transport=True)
+    
+    query = gql(
+        """
+            mutation createWeather1 ($id:ID,$channelid:String,$devstatus:String,$epi_timestamp:String,$intensity:String){
+            createWeather1(id:$id,channelid:$channelid,devstatus:$devstatus,epi_timestamp:$epi_timestamp,intensity:$intensity) {
+            id
+            channelid
+            devstatus
+            epi_timestamp
+            intensity
+            }
+        }"""
+    )
+        
+    params = {
+        "id":"1",
+        "channelid":"kid424234",
+        "devstatus":"nijan325546",
+        "epi_timestamp":"bala3552",
+        "intensity":"gih326"}
+    resp = client.execute(query,variable_values=params)
+    return (resp)
+
+# Schema in Appsync .
+
+ input CreateWeather1Input {
+	id: ID
+	channelid: String
+	devstatus: String
+	epi_timestamp: String
+	intensity: String
+}
+
+type Mutation @aws_iam {
+	createWeather1(
+		id: ID,
+		channelid: String,
+		devstatus: String,
+		epi_timestamp: String,
+		intensity: String
+	): weather1!
+}
+
+type Query {
+	getWeather1(id: ID!): weather1
+}
+
+schema {
+	query: Query
+	mutation: Mutation
+}
+
+type weather1 @aws_iam {
+	id: ID
+	channelid: String
+	devstatus: String
+	epi_timestamp: String
+	intensity: String
+}
+
+
+
