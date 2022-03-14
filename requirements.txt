@@ -1,0 +1,4 @@
+gql==3.0.0
+requests
+requests-aws4auth ==1.1.1
+requests-toolbelt ==0.9.1

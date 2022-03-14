@@ -1,0 +1,34 @@
+﻿input CreateWeather1Input {
+	id: ID
+	channelid: String
+	devstatus: String
+	epi_timestamp: String
+	intensity: String
+}
+
+type Mutation @aws_iam {
+	createWeather1(
+		id: ID,
+		channelid: String,
+		devstatus: String,
+		epi_timestamp: String,
+		intensity: String
+	): weather1!
+}
+
+type Query {
+	getWeather1(id: ID!): weather1
+}
+
+schema {
+	query: Query
+	mutation: Mutation
+}
+
+type weather1 @aws_iam {
+	id: ID
+	channelid: String
+	devstatus: String
+	epi_timestamp: String
+	intensity: String
+}
